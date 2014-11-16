@@ -45,10 +45,13 @@ sed -i "s/oldKernel/newKernel/g" oldKernel.list
 comm -13 devKernel.list oldKernel.list > remove.list
 #generate addition list?
 comm -23 devKernel.list.bak oldKernel.list.bak > add.list
+cp add.list.bak
 #sed -i "s/oldKernel/newKernel/g" remove.list
 #sed -i "s/Kernel/newKernel/g" remove.list
 #sed -i "s/oldKernel/newKernel/g" remove.list
 #sed -i "s/Kernel/newKernel/g" remove.list
+cp add.list add.list.list
+sed -i "s/Kernel/newKernel/g" add.list.list
 cd ..
 
 #generate newKernel folder
@@ -57,9 +60,11 @@ rsync -a oldKernel newKernel --exclude oldKernel/.git
 #Remove all files not common to both kernels in newKernel folder
 #cat temp/remove.list
 rm <(cat temp/remove.list)
-cat temp/add.list
-#cp <(cat temp/add.list)
+
+#add all files not common to both kernels in Kernel folder
+#cat temp/add.list
+cp <(cat temp/add.list)
 
 #generate patch from Kernel and newKernel diff
-#diff -uNr ./Kernel ./newKernel > temp/patchdevicefile
+diff -uNr ./Kernel ./newKernel > temp/patchdevicefile
 
